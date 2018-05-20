@@ -2,5 +2,32 @@
 
 {% block content %}
 
+<div class="container">
+	<div class="row">
+		<div class="col-md-4">
+			<form action="/add/numbers" method="POST">
+				<div class="form-group">
+					<label for="user_id">user id</label>
+					<input type="text" class="form-control" id="user_id" name="user_id"/>
+				</div>
+				<div class="form-group">
+					<label for="home">home number</label>
+					<input type="text" class="form-control" id="home" name="home"/>
+				</div>
+				<div class="form-group">
+					<label for="mobile">mobile number</label>
+					<input type="text" class="form-control" id="mobile" name="mobile"/>
+				</div>
+				<div class="form-group">
+					<label for="office">office number</label>
+					<input type="text" class="form-control" id="office" name="office"/>
+				</div>
+				<div class="form-group">
+					<input type="submit" class="btn" name="submit"/>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 
 {% endblock %}

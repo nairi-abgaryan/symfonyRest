@@ -11,8 +11,8 @@ class Numbers
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -39,5 +39,21 @@ class Numbers
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setUserId($user_id) {
+        $this->user_id = $user_id;
+    }
+
+    public function setHome($home) {
+        $this->home = $home;
+    }
+
+    public function setMobile($mobile) {
+        $this->mobile = $mobile;
+    }
+
+    public function setOffice($office) {
+        $this->office = $office;
     }
 }

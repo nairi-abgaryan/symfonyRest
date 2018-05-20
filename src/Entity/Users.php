@@ -11,8 +11,8 @@ class Users
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -34,5 +34,17 @@ class Users
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setFname($fname) {
+        $this->fname = $fname;
+    }
+
+    public function setLname($lname) {
+        $this->lname = $lname;
+    }
+
+    public function setEmail($email) {
+        $this->email = $email;
     }
 }
