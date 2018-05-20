@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	{% include "front/_includes/styles.html.twig" %}
+</head>
+<body>
+	<header>
+		{% include "front/_includes/navbar.html.twig" %}
+	</header>
+	
+	 {{ block("content") }} 
+	
+	{% include "front/_includes/scripts.html.twig" %}
+</body>
+</html>
