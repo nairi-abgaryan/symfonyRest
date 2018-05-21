@@ -35,6 +35,7 @@ class UsersController extends Controller
    	}
 
    	/**
+     * Matches("/edit/user/*")
 	 * @Route("/edit/user/{id}", name="editUsers")
      * @Method({"PUT"})
      */
@@ -43,12 +44,13 @@ class UsersController extends Controller
             $id = explode("/", $_SERVER['REQUEST_URI'])[3];
             $data = $this->getDoctrine()
             ->getRepository(Users::class)
-            ->find($id);  
+            ->find($id);
         }  
         return $this->render('front/users-table.html.twig');
    	}
 
    	/**
+     * Matches("/delete/user/*")
 	 * @Route("/delete/user/{id}", name="deleteUsers")
      * @Method({"DELETE"})
      */

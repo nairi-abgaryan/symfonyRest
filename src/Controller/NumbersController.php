@@ -36,7 +36,8 @@ class NumbersController extends Controller
     }
 
     /**
-     * @Route("/edit/user/{id}", name="editUsers")
+     * Matches("/edit/number/*")
+     * @Route("/edit/number/{id}", name="editUsers")
      * @Method({"PUT"})
      */
     public function updateRecord(Request $request, $id) {
@@ -50,7 +51,8 @@ class NumbersController extends Controller
     }
 
     /**
-     * @Route("/delete/user/{id}", name="deleteUsers")
+     * Matches("/delete/number/*")
+     * @Route("/delete/number/{id}", name="deleteUsers")
      * @Method({"DELETE"})
      */
     public function deleteRecord(Request $request, $id) {
@@ -59,7 +61,7 @@ class NumbersController extends Controller
             $data = $this->getDoctrine()
             ->getRepository(Users::class)
             ->find($id);
-            dump($data);die;
+            dump($data);
             return new Response("asd");
         }  
         return $this->render('front/users-table.html.twig');
