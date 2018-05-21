@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -32,9 +33,11 @@ class UsersController extends Controller
    	public function updateRecord(Request $request) {
    		if ($request->isMethod('put')) {
    			echo "string";
+            return new Response('Hello, world');
    		}
    		if ($request->request->get('_method') == 'put') {
    			echo "asd";
+            return new Response('Hello, world');
    		}
    	}
 
@@ -44,9 +47,11 @@ class UsersController extends Controller
    	public function deleteRecord(Request $request) {
    		if ($request->isMethod('delete')) {
    			echo "string";
+            return new Response('asd');
    		}
    		if ($request->request->get('_method') == 'delete') {
    			echo "asd";
+            return new Response('asd');
    		}
    	}
 

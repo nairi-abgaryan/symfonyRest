@@ -41,7 +41,7 @@ class Numbers
         return $this->id;
     }
 
-    public function getUserId() {
+    public function getUser_id() {
         return $this->user_id;
     }
 
