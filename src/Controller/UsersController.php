@@ -50,5 +50,15 @@ class UsersController extends Controller
    		}
    	}
 
+    /**
+    * @route("/get/users")
+    */
+    public function getAll() {
+        $entity = $this->getDoctrine()->getManager();
+        $users = $entity->getRepository(Users::class)->findAll();
+        return $this->render('front/users-table.html.twig', [
+            'users' => $users
+        ]);
+    }
 
 }

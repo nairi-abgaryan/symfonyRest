@@ -27,4 +27,15 @@ class NumbersController extends Controller
     	}
         return $this->render('front/numbers.html.twig');
     }
+
+    /**
+    * @route("/get/numbers")
+    */
+    public function getAll() {
+        $entity = $this->getDoctrine()->getManager();
+        $numbers = $entity->getRepository(Numbers::class)->findAll();
+        return $this->render('front/numbers-table.html.twig', [
+            'numbers' => $numbers
+        ]);
+    }
 }

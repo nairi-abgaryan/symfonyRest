@@ -1,0 +1,21 @@
+{% extends 'front/layout/app.html.twig' %}
+
+{% block content %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-4">
+			{% for number in numbers %}
+				<tr>
+					<td>{{number.home|e}}</td>
+					<td>{{number.mobile|e}}</td>
+					<td>{{number.office|e}}</td>
+					<td><a href="/edit/number/{{number.userId}}" class="btn btn-xs btn-primary">edit</a></td>
+					<td><a href="/delete/number/{{number.userId}}" class="btn btn-xs btn-danger">delete</a></td>
+				</tr>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+
+{% endblock %}

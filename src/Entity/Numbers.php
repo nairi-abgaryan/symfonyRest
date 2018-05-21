@@ -41,6 +41,22 @@ class Numbers
         return $this->id;
     }
 
+    public function getUserId() {
+        return $this->user_id;
+    }
+
+    public function getHome() {
+        return $this->home;
+    }
+
+    public function getMobile() {
+        return $this->mobile;
+    }
+
+    public function getOffice() {
+        return $this->office;
+    }
+
     public function setUserId($user_id) {
         $this->user_id = $user_id;
     }

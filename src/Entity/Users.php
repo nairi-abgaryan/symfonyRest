@@ -36,6 +36,18 @@ class Users
         return $this->id;
     }
 
+    public function getFname() {
+        return $this->fname;
+    }
+
+    public function getLname() {
+        return $this->lname;
+    }
+
+    public function getEmail() {
+        return $this->email;
+    }
+
     public function setFname($fname) {
         $this->fname = $fname;
     }
