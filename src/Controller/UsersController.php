@@ -2,14 +2,21 @@
 
 namespace App\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use App\Entity\Users;
+use App\Entity\Numbers;
 
 class UsersController extends Controller
 {
+
     /**
 	 * @Route("/add/users", name="addUsers")
      */
@@ -29,41 +36,50 @@ class UsersController extends Controller
 
    	/**
 	 * @Route("/edit/user/{id}", name="editUsers")
+     * @Method({"PUT"})
      */
    	public function updateRecord(Request $request) {
-   		if ($request->isMethod('put')) {
-   			echo "string";
-            return new Response('Hello, world');
-   		}
-   		if ($request->request->get('_method') == 'put') {
-   			echo "asd";
-            return new Response('Hello, world');
-   		}
+        if ($request->isXmlHttpRequest() && $request->isMethod('put')) {
+            $id = explode("/", $_SERVER['REQUEST_URI'])[3];
+            $data = $this->getDoctrine()
+            ->getRepository(Users::class)
+            ->find($id);  
+        }  
+        return $this->render('front/users-table.html.twig');
    	}
 
    	/**
 	 * @Route("/delete/user/{id}", name="deleteUsers")
+     * @Method({"DELETE"})
      */
    	public function deleteRecord(Request $request) {
-   		if ($request->isMethod('delete')) {
-   			echo "string";
-            return new Response('asd');
-   		}
-   		if ($request->request->get('_method') == 'delete') {
-   			echo "asd";
-            return new Response('asd');
-   		}
+   		if ($request->isXmlHttpRequest() && $request->isMethod('delete')) {
+            $id = explode("/", $_SERVER['REQUEST_URI'])[3];
+            $data = $this->getDoctrine()
+            ->getRepository(Users::class)
+            ->find($id);
+            print_r($data);die;
+            return new Response("asd");  
+        }  
+        // return $this->render('front/users-table.html.twig');
    	}
 
     /**
-    * @route("/get/users")
+    * @Route("/get/users")
+    * @Method({"GET"})
     */
-    public function getAll() {
+    public function getAll(Request $request) {
+        if (!$request->isXmlHttpRequest()) {
+            return $this->render('front/users-table.html.twig');
+        }
         $entity = $this->getDoctrine()->getManager();
         $users = $entity->getRepository(Users::class)->findAll();
-        return $this->render('front/users-table.html.twig', [
-            'users' => $users
-        ]);
+        $normalizer = new ObjectNormalizer();
+        $normalizer->setIgnoredAttributes(array($users));
+        $encoder = new JsonEncoder();
+        $serializer = new Serializer(array($normalizer), array($encoder));
+        $data = $serializer->serialize($users, 'json');
+        return new JsonResponse($data);
     }
 
 }

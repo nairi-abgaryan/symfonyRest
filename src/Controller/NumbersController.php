@@ -3,16 +3,23 @@
 namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use App\Entity\Numbers;
+use App\Entity\Users;
 
 class NumbersController extends Controller
 {
     /**
      * @Route("/add/numbers", name="addNumbers")
      */
-    public function index(Request $request)
+    public function createRecord(Request $request)
     {
     	if ($request->isMethod('post') && !empty($request->request->get('user_id')) && !empty($request->request->get('mobile')) && !empty($request->request->get('home')) && !empty($request->request->get('office'))) {
    			$entity = $this->getDoctrine()->getManager();
@@ -29,13 +36,51 @@ class NumbersController extends Controller
     }
 
     /**
+     * @Route("/edit/user/{id}", name="editUsers")
+     * @Method({"PUT"})
+     */
+    public function updateRecord(Request $request, $id) {
+        if ($request->isXmlHttpRequest() && $request->isMethod('put')) {
+            $id = explode("/", $_SERVER['REQUEST_URI'])[3];
+            $data = $this->getDoctrine()
+            ->getRepository(Users::class)
+            ->find($id);  
+        }  
+        return $this->render('front/users-table.html.twig');
+    }
+
+    /**
+     * @Route("/delete/user/{id}", name="deleteUsers")
+     * @Method({"DELETE"})
+     */
+    public function deleteRecord(Request $request, $id) {
+        if ($request->isXmlHttpRequest() && $request->isMethod('delete')) {
+            $id = explode("/", $_SERVER['REQUEST_URI'])[3];
+            $data = $this->getDoctrine()
+            ->getRepository(Users::class)
+            ->find($id);
+            dump($data);die;
+            return new Response("asd");
+        }  
+        return $this->render('front/users-table.html.twig');
+    }
+
+    /**
     * @route("/get/numbers")
+    * @Method({"GET"})
     */
-    public function getAll() {
+    public function getAll(Request $request) {
+        if (!$request->isXmlHttpRequest()) {
+            return $this->render('front/numbers-table.html.twig');
+        }
         $entity = $this->getDoctrine()->getManager();
         $numbers = $entity->getRepository(Numbers::class)->findAll();
-        return $this->render('front/numbers-table.html.twig', [
-            'numbers' => $numbers
-        ]);
+        $normalizer = new ObjectNormalizer();
+        $normalizer->setIgnoredAttributes(array($numbers));
+        $encoder = new JsonEncoder();
+        $serializer = new Serializer(array($normalizer), array($encoder));
+        $data = $serializer->serialize($numbers, 'json');
+        return new JsonResponse($data);
     }
+
 }

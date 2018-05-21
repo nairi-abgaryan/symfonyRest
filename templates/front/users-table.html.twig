@@ -5,16 +5,9 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-4">
-			<table class="table table-striped">
-			{% for user in users %}
-				<tr>
-					<td>{{user.fname|e}}</td>
-					<td>{{user.lname|e}}</td>
-					<td>{{user.email|e}}</td>
-					<td><a href="/edit/user/{{user.id}}" class="btn btn-xs btn-primary">edit</a></td>
-					<td><a href="/delete/user/{{user.id}}" class="btn btn-xs btn-danger">delete</a></td>
-				</tr>
-			{% endfor %}
+			<div id="message"></div>
+			<table class="table table-striped" id="table">
+
 			</table>
 		</div>
 	</div>
