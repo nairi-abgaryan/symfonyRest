@@ -34,14 +34,6 @@ class UsersController extends Controller
    		return $this->render('front/users.html.twig');
    	}
 
-    /**
-     * Matches("/edit/user/*")
-     * @Route("/edit/user/{id}", name="editUsers")
-     */
-    public function updateRecordView(Request $request) {
-        
-    }
-
    	/**
      * Matches("/edit/user/*")
 	 * @Route("/edit/user/{id}", name="editUsers")
@@ -52,8 +44,13 @@ class UsersController extends Controller
         } 
         $id = explode("/", $_SERVER['REQUEST_URI'])[3];
         $data = $this->getDoctrine()
-        ->getRepository(Users::class)
-        ->find($id);
+                     ->getRepository(Users::class)
+                     ->find($id);
+        $normalizer = new ObjectNormalizer();
+        $normalizer->setIgnoredAttributes(array($data));
+        $encoder = new JsonEncoder();
+        $serializer = new Serializer(array($normalizer), array($encoder));
+        $data = $serializer->serialize($data, 'json');
         return $this->render('front/edit.html.twig', ['data' => $data]);
    	}
 
@@ -64,12 +61,14 @@ class UsersController extends Controller
      */
    	public function deleteRecord(Request $request) {
    		if ($request->isXmlHttpRequest() && $request->isMethod('delete')) {
+            $entity = $this->getDoctrine()->getManager();
             $id = explode("/", $_SERVER['REQUEST_URI'])[3];
             $data = $this->getDoctrine()
-            ->getRepository(Users::class)
-            ->find($id);
-            print_r($data);die;
-            return new Response("asd");  
+                         ->getRepository(Users::class)
+                         ->find($id);
+            $entity->remove($data);
+            $entity->flush();
+            return $this->render('front/users-table.html.twig');
         }
    	}
 
@@ -78,17 +77,17 @@ class UsersController extends Controller
     * @Method({"GET"})
     */
     public function getAll(Request $request) {
-        if (!$request->isXmlHttpRequest()) {
-            return $this->render('front/users-table.html.twig');
+        if ($request->isXmlHttpRequest()) {
+          $entity = $this->getDoctrine()->getManager();
+          $users = $entity->getRepository(Users::class)->findAll();
+          $normalizer = new ObjectNormalizer();
+          $normalizer->setIgnoredAttributes(array($users));
+          $encoder = new JsonEncoder();
+          $serializer = new Serializer(array($normalizer), array($encoder));
+          $data = $serializer->serialize($users, 'json');
+          return new JsonResponse($data);
         }
-        $entity = $this->getDoctrine()->getManager();
-        $users = $entity->getRepository(Users::class)->findAll();
-        $normalizer = new ObjectNormalizer();
-        $normalizer->setIgnoredAttributes(array($users));
-        $encoder = new JsonEncoder();
-        $serializer = new Serializer(array($normalizer), array($encoder));
-        $data = $serializer->serialize($users, 'json');
-        return new JsonResponse($data);
+        return $this->render('front/users-table.html.twig');
     }
 
 }

@@ -3,15 +3,15 @@
     <div class="container">
     	<div class="row">
     		<h3>Data</h3>
+            {{ dump(data) }}
     		<div class="col-sm-4">
     		<form action="">
-                {{ dump(data) }}
     			<input type="hidden" name="_method" value="PUT"/>
-        		{% for key,value in data %}	
+                {% for value in data|json_decode %}
                     <div class="form-group">
-        				<label for="{{ value.key }}">{{ value.key }}</label>
-                        <input type="text" name="{{ value.key }}" name="value.key" id="{{ value.key }}" />
-        			</div>
+                        <label for="{{ value|e }}">{{ value|e }}</label>
+                        <input type="text" name="{{ value|e }}" value="{{ value|e }}" id="{{ value|e }}" />
+                    </div>
                 {% endfor %}
     		</form>
     		</div>

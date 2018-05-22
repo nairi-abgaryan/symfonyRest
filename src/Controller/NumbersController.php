@@ -57,12 +57,14 @@ class NumbersController extends Controller
      */
     public function deleteRecord(Request $request, $id) {
         if ($request->isXmlHttpRequest() && $request->isMethod('delete')) {
+            $entity = $this->getDoctrine()->getManager();
             $id = explode("/", $_SERVER['REQUEST_URI'])[3];
             $data = $this->getDoctrine()
                          ->getRepository(Users::class)
                          ->find($id);
-            dump($data);
-        return $this->render('front/numbers-table.html.twig');
+            $entity->remove($data);
+            $entity->flush();
+            return $this->render('front/numbers-table.html.twig');
         }  
     }
 
@@ -71,17 +73,17 @@ class NumbersController extends Controller
     * @Method({"GET"})
     */
     public function getAll(Request $request) {
-        if (!$request->isXmlHttpRequest()) {
-            return $this->render('front/numbers-table.html.twig');
+        if ($request->isXmlHttpRequest()) {
+            $entity = $this->getDoctrine()->getManager();
+            $numbers = $entity->getRepository(Numbers::class)->findAll();
+            $normalizer = new ObjectNormalizer();
+            $normalizer->setIgnoredAttributes(array($numbers));
+            $encoder = new JsonEncoder();
+            $serializer = new Serializer(array($normalizer), array($encoder));
+            $data = $serializer->serialize($numbers, 'json');
+            return new JsonResponse($data);
         }
-        $entity = $this->getDoctrine()->getManager();
-        $numbers = $entity->getRepository(Numbers::class)->findAll();
-        $normalizer = new ObjectNormalizer();
-        $normalizer->setIgnoredAttributes(array($numbers));
-        $encoder = new JsonEncoder();
-        $serializer = new Serializer(array($normalizer), array($encoder));
-        $data = $serializer->serialize($numbers, 'json');
-        return new JsonResponse($data);
+        return $this->render('front/numbers-table.html.twig');
     }
 
 }
