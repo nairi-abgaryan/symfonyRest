@@ -1,0 +1,20 @@
+{% extends "front/layout/app.html.twig" %}
+{% block content %}  
+    <div class="container">
+    	<div class="row">
+    		<h3>Data</h3>
+    		<div class="col-sm-4">
+    		<form action="">
+                {{ dump(data) }}
+    			<input type="hidden" name="_method" value="PUT"/>
+        		{% for key,value in data %}	
+                    <div class="form-group">
+        				<label for="{{ value.key }}">{{ value.key }}</label>
+                        <input type="text" name="{{ value.key }}" name="value.key" id="{{ value.key }}" />
+        			</div>
+                {% endfor %}
+    		</form>
+    		</div>
+    	</div>
+    </div>
+{% endblock %} 

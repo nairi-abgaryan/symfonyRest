@@ -38,33 +38,32 @@ class NumbersController extends Controller
     /**
      * Matches("/edit/number/*")
      * @Route("/edit/number/{id}", name="editUsers")
-     * @Method({"PUT"})
+     * @Method({"GET", "PUT"})
      */
     public function updateRecord(Request $request, $id) {
+        $id = explode("/", $_SERVER['REQUEST_URI'])[3];
+        $data = $this->getDoctrine()
+        ->getRepository(Users::class)
+        ->find($id);  
         if ($request->isXmlHttpRequest() && $request->isMethod('put')) {
-            $id = explode("/", $_SERVER['REQUEST_URI'])[3];
-            $data = $this->getDoctrine()
-            ->getRepository(Users::class)
-            ->find($id);  
         }  
-        return $this->render('front/users-table.html.twig');
+        return $this->render('front/edit.html.twig', ['data' => $data]);
     }
 
     /**
      * Matches("/delete/number/*")
      * @Route("/delete/number/{id}", name="deleteUsers")
-     * @Method({"DELETE"})
+     * @Method({"GET", "DELETE"})
      */
     public function deleteRecord(Request $request, $id) {
         if ($request->isXmlHttpRequest() && $request->isMethod('delete')) {
             $id = explode("/", $_SERVER['REQUEST_URI'])[3];
             $data = $this->getDoctrine()
-            ->getRepository(Users::class)
-            ->find($id);
+                         ->getRepository(Users::class)
+                         ->find($id);
             dump($data);
-            return new Response("asd");
+        return $this->render('front/numbers-table.html.twig');
         }  
-        return $this->render('front/users-table.html.twig');
     }
 
     /**

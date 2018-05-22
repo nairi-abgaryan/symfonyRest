@@ -9,11 +9,19 @@ $(function(){
 				$('#table').append('<tbody></tbody>');
 				if (url == "/get/users") {
 					for(let i = 0; i <= res.length; i++){
-						$('#table tbody').append("<tr><td>"+res[i].fname+"</td><td>"+res[i].lname+"</td><td>"+res[i].email+"</td><td><a class='btn btn-xs btn-primary edit' href='/edit/user/"+res[i].id+"'>edit</a></td><td><a class='btn btn-xs btn-danger delete' href='/delete/user/"+res[i].id+"'>delete</a></td></tr>");
+						try {
+							$('#table tbody').append("<tr><td>"+res[i].fname+"</td><td>"+res[i].lname+"</td><td>"+res[i].email+"</td><td><a class='btn btn-xs btn-primary edit' href='/edit/user/"+res[i].id+"'>edit</span></td><td><span class='btn btn-xs btn-danger delete' data-href='/delete/user/"+res[i].id+"'>delete</a></td></tr>");
+						} catch {
+							//
+						}
 					}
 				} else if (url == "/get/numbers") {
 					for(let i = 0; i <= res.length; i++){
-						$('#table tbody').append("<tr><td>"+res[i].home+"</td><td>"+res[i].mobile+"</td><td>"+res[i].office+"</td><td><a class='btn btn-xs btn-primary edit' href='/edit/number/"+res[i].userId+"'>edit</a></td><td><a class='btn btn-xs btn-danger delete' href='/delete/number/"+res[i].userId+"'>delete</a></td></tr>");
+						try {
+							$('#table tbody').append("<tr><td>"+res[i].home+"</td><td>"+res[i].mobile+"</td><td>"+res[i].office+"</td><td><span class='btn btn-xs btn-primary edit' href='/edit/number/"+res[i].userId+"'>edit</a></td><td><a class='btn btn-xs btn-danger delete' data-href='/delete/number/"+res[i].userId+"'>delete</span></td></tr>");
+						} catch {
+							//
+						}
 					}
 				}
 			}
@@ -47,5 +55,6 @@ $(function(){
 			}
 		}); 
 	});
+
 
 });

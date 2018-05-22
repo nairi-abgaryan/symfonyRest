@@ -34,25 +34,33 @@ class UsersController extends Controller
    		return $this->render('front/users.html.twig');
    	}
 
+    /**
+     * Matches("/edit/user/*")
+     * @Route("/edit/user/{id}", name="editUsers")
+     */
+    public function updateRecordView(Request $request) {
+        
+    }
+
    	/**
      * Matches("/edit/user/*")
 	 * @Route("/edit/user/{id}", name="editUsers")
-     * @Method({"PUT"})
+     * @Method({"GET", "PUT"})
      */
    	public function updateRecord(Request $request) {
         if ($request->isXmlHttpRequest() && $request->isMethod('put')) {
-            $id = explode("/", $_SERVER['REQUEST_URI'])[3];
-            $data = $this->getDoctrine()
-            ->getRepository(Users::class)
-            ->find($id);
-        }  
-        return $this->render('front/users-table.html.twig');
+        } 
+        $id = explode("/", $_SERVER['REQUEST_URI'])[3];
+        $data = $this->getDoctrine()
+        ->getRepository(Users::class)
+        ->find($id);
+        return $this->render('front/edit.html.twig', ['data' => $data]);
    	}
 
    	/**
      * Matches("/delete/user/*")
 	 * @Route("/delete/user/{id}", name="deleteUsers")
-     * @Method({"DELETE"})
+     * @Method({"GET", "DELETE"})
      */
    	public function deleteRecord(Request $request) {
    		if ($request->isXmlHttpRequest() && $request->isMethod('delete')) {
@@ -62,8 +70,7 @@ class UsersController extends Controller
             ->find($id);
             print_r($data);die;
             return new Response("asd");  
-        }  
-        // return $this->render('front/users-table.html.twig');
+        }
    	}
 
     /**
