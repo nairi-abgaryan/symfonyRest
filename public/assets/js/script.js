@@ -1,4 +1,4 @@
-$(function(){
+$(document).ready(function(){
 	if (location.pathname == "/get/users" || location.pathname == "/get/numbers") {
 		let url = location.pathname;
 		$.ajax({
@@ -56,5 +56,20 @@ $(function(){
 		}); 
 	});
 
+	$('#createUser').on('click', function(){
+		let data = {
+			fname: $('#fname').val(),
+			lname: $('#lname').val(),
+			email: $('#email').val(),
+		};
+		$.ajax({
+			url: "/add/users",
+			method: "POST",
+			data: data,
+			success: function(res) {
+				$('#message').html(res.success);
+			}
+		});
+	});
 
 });

@@ -19,9 +19,10 @@ class UsersController extends Controller
 
     /**
 	 * @Route("/add/users", name="addUsers")
+     * @Method({"GET", "POST"})
      */
    	public function createRecord(Request $request) {
-   		if ($request->isMethod('post') && !empty($request->request->get('fname')) && !empty($request->request->get('lname')) && !empty($request->request->get('email'))) {
+   		if ($request->isMethod('post') && $request->isXmlHttpRequest()) {
    			$entity = $this->getDoctrine()->getManager();
    			$user = new Users();
    			$user->setFname($request->request->get('fname'));
@@ -29,8 +30,8 @@ class UsersController extends Controller
    			$user->setEmail($request->request->get('email'));
    			$entity->persist($user);
    			$entity->flush();
-   			return $this->redirectToRoute('addUsers');
-   		}
+            echo json_encode(['success' => 'User created successfully']);
+        }
    		return $this->render('front/users.html.twig');
    	}
 
@@ -40,12 +41,18 @@ class UsersController extends Controller
      * @Method({"GET", "PUT"})
      */
    	public function updateRecord(Request $request) {
-        if ($request->isXmlHttpRequest() && $request->isMethod('put')) {
-        } 
         $id = explode("/", $_SERVER['REQUEST_URI'])[3];
         $data = $this->getDoctrine()
                      ->getRepository(Users::class)
                      ->find($id);
+        if ($request->isXmlHttpRequest() && $request->isMethod('put')) {
+            $entity = $this->getDoctrine()->getManager();
+            $data->setFname($request->request->get('fname'));
+            $data->setLname($request->request->get('lname'));
+            $data->setEmail($request->request->get('email'));
+            $entity->persist($data);
+            $entity->flush();
+        } 
         $normalizer = new ObjectNormalizer();
         $normalizer->setIgnoredAttributes(array($data));
         $encoder = new JsonEncoder();
