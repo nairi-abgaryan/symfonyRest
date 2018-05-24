@@ -3,16 +3,25 @@
     <div class="container">
     	<div class="row">
     		<h3>Data</h3>
-            {{ dump(data) }}
     		<div class="col-sm-4">
     		<form action="">
-    			<input type="hidden" name="_method" value="PUT"/>
-                {% for value in data|json_decode %}
+                <input type="hidden" name="_method" value="PUT"/>
+    			<input type="hidden" name="id" value="{{data.id}}" id="id" />
                     <div class="form-group">
-                        <label for="{{ value|e }}">{{ value|e }}</label>
-                        <input type="text" name="{{ value|e }}" value="{{ value|e }}" id="{{ value|e }}" />
+                        <label for="{{ data.fname }}">fname</label>
+                        <input type="text" name="{{ data.fname }}" value="{{ data.fname }}" id="fname" class="form-control" />
                     </div>
-                {% endfor %}
+                    <div class="form-group">
+                        <label for="{{ data.lname }}">lname</label>
+                        <input type="text" name="{{ data.lname }}" value="{{ data.lname }}" id="lname" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ data.email }}">email</label>
+                        <input type="text" name="{{ data.email }}" value="{{ data.email }}" id="email" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <input type="button" name="submit" id="updateUser" value="submit" class="btn" />
+                    </div>
     		</form>
     		</div>
     	</div>

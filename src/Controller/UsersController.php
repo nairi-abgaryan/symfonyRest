@@ -53,11 +53,9 @@ class UsersController extends Controller
             $entity->persist($data);
             $entity->flush();
         } 
-        $normalizer = new ObjectNormalizer();
-        $normalizer->setIgnoredAttributes(array($data));
-        $encoder = new JsonEncoder();
-        $serializer = new Serializer(array($normalizer), array($encoder));
-        $data = $serializer->serialize($data, 'json');
+        $data = $this->getDoctrine()
+                     ->getRepository(Users::class)
+                     ->find($id);
         return $this->render('front/edit.html.twig', ['data' => $data]);
    	}
 
@@ -84,7 +82,7 @@ class UsersController extends Controller
     * @Method({"GET"})
     */
     public function getAll(Request $request) {
-        if ($request->isXmlHttpRequest()) {
+        if($request->isXmlHttpRequest()) {
           $entity = $this->getDoctrine()->getManager();
           $users = $entity->getRepository(Users::class)->findAll();
           $normalizer = new ObjectNormalizer();

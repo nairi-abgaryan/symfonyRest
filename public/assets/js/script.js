@@ -42,14 +42,20 @@ $(document).ready(function(){
 		}); 
 	});
 
-	$('.edit').on('click', function(){
-		let url = $(this).attr('href');
+	$('#updateUser').on('click', function(){
+		let url = "/edit/user/"+$('#id').val();
 		$.ajax({
 			url: url,
-			method: "put",
+			method: "PUT",
+			data: {
+				fname: $('#fname').val(),
+				lname: $('#lname').val(),
+				email: $('#email').val(),
+			},
 			success: function() {
-				location.reload();
+				window.history.back();
 			}, error: function(res) {
+				alert("asds")
 				$('#error').addClass('alert');
 				$('#error').html(res.message);
 			}
