@@ -52,11 +52,12 @@ class UsersController extends Controller
             $data->setEmail($request->request->get('email'));
             $entity->persist($data);
             $entity->flush();
+            return new Response("success");
         } 
         $data = $this->getDoctrine()
                      ->getRepository(Users::class)
                      ->find($id);
-        return $this->render('front/edit.html.twig', ['data' => $data]);
+        return $this->render('front/edit-user.html.twig', ['data' => $data]);
    	}
 
    	/**
@@ -66,15 +67,16 @@ class UsersController extends Controller
      */
    	public function deleteRecord(Request $request) {
    		if ($request->isXmlHttpRequest() && $request->isMethod('delete')) {
-            $entity = $this->getDoctrine()->getManager();
             $id = explode("/", $_SERVER['REQUEST_URI'])[3];
             $data = $this->getDoctrine()
-                         ->getRepository(Users::class)
-                         ->find($id);
+                     ->getRepository(Users::class)
+                     ->find($id);
+            $entity = $this->getDoctrine()->getManager();
             $entity->remove($data);
             $entity->flush();
             return $this->render('front/users-table.html.twig');
         }
+        return $this->render('front/users-table.html.twig');
    	}
 
     /**

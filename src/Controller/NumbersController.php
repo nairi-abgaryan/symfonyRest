@@ -37,35 +37,45 @@ class NumbersController extends Controller
 
     /**
      * Matches("/edit/number/*")
-     * @Route("/edit/number/{id}", name="editUsers")
+     * @Route("/edit/number/{id}", name="editNumbers")
      * @Method({"GET", "PUT"})
      */
-    public function updateRecord(Request $request, $id) {
+    public function updateRecord(Request $request) {
         $id = explode("/", $_SERVER['REQUEST_URI'])[3];
         $data = $this->getDoctrine()
-        ->getRepository(Users::class)
-        ->find($id);  
+                     ->getRepository(Numbers::class)
+                     ->find($id);
         if ($request->isXmlHttpRequest() && $request->isMethod('put')) {
-        }  
-        return $this->render('front/edit.html.twig', ['data' => $data]);
+            $entity = $this->getDoctrine()->getManager();
+            $data->setUserId($request->request->get('user_id'));
+            $data->setHome($request->request->get('home'));
+            $data->setOffice($request->request->get('office'));
+            $data->setMobile($request->request->get('mobile'));
+            $entity->persist($data);
+            $entity->flush();
+            return new Response("success");
+        } 
+        $data = $this->getDoctrine()
+                     ->getRepository(Numbers::class)
+                     ->find($id);
+        return $this->render('front/edit-number.html.twig', ['data' => $data]);
     }
 
     /**
      * Matches("/delete/number/*")
-     * @Route("/delete/number/{id}", name="deleteUsers")
+     * @Route("/delete/number/{id}", name="deleteNumbers")
      * @Method({"GET", "DELETE"})
      */
     public function deleteRecord(Request $request, $id) {
-        if ($request->isXmlHttpRequest() && $request->isMethod('delete')) {
-            $entity = $this->getDoctrine()->getManager();
+       if ($request->isXmlHttpRequest() && $request->isMethod('delete')) {
             $id = explode("/", $_SERVER['REQUEST_URI'])[3];
             $data = $this->getDoctrine()
-                         ->getRepository(Users::class)
-                         ->find($id);
+                     ->getRepository(Numbers::class)
+                     ->find($id);
             $entity->remove($data);
             $entity->flush();
-            return $this->render('front/numbers-table.html.twig');
-        }  
+        }
+        return $this->render('front/numbers-table.html.twig');
     }
 
     /**
