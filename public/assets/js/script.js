@@ -63,7 +63,7 @@ function updateRecord(){
 	}); 
 }
 
-$('#createUser').on('click', function(){
+function createUser(){
 	let data = {
 		fname: $('#fname').val(),
 		lname: $('#lname').val(),
@@ -77,6 +77,7 @@ $('#createUser').on('click', function(){
 			location.reload();
 		}
 	});
-});
+};
 
+$('#createUser').on('click', createUser); 
 $('#updateUser').on('click', updateRecord);
