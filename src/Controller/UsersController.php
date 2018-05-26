@@ -53,10 +53,7 @@ class UsersController extends Controller
             $entity->persist($data);
             $entity->flush();
             return new Response("success");
-        } 
-        $data = $this->getDoctrine()
-                     ->getRepository(Users::class)
-                     ->find($id);
+        }
         return $this->render('front/edit-user.html.twig', ['data' => $data]);
    	}
 

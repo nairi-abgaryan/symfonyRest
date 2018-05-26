@@ -26,11 +26,7 @@ class IndexController extends Controller
 	*/
 	public function getData(Request $request) {
    		if ($request->isMethod('get')) {
-   			$entity = $this->getDoctrine()->getManager();
-   			$users = $entity->getRepository(Users::class)->findAll();
-   			$numbers = $entity->getRepository(Numbers::class)->findAll();
-			var_dump($users);
-			var_dump($numbers);die;
+   			//
    		}
 		return  $this->render("front/index.html.twig");
 	}

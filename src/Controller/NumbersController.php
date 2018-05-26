@@ -55,9 +55,6 @@ class NumbersController extends Controller
             $entity->flush();
             return new Response("success");
         } 
-        $data = $this->getDoctrine()
-                     ->getRepository(Numbers::class)
-                     ->find($id);
         return $this->render('front/edit-number.html.twig', ['data' => $data]);
     }
 
@@ -72,6 +69,7 @@ class NumbersController extends Controller
             $data = $this->getDoctrine()
                      ->getRepository(Numbers::class)
                      ->find($id);
+            $entity = $this->getDoctrine()->getManager();
             $entity->remove($data);
             $entity->flush();
         }

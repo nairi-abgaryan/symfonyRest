@@ -10,7 +10,7 @@ function getData(url) {
 			if (url == "/get/users") {
 				for(let i = 0; i <= res.length; i++){
 					try {
-						$('#table tbody').append("<tr><td>"+res[i].fname+"</td><td>"+res[i].lname+"</td><td>"+res[i].email+"</td><td><a class='btn btn-xs btn-primary edit' href='/edit/user/"+res[i].id+"'>edit</span></td><td><span class='btn btn-xs btn-danger delete' onclick="+"deleteRecord('|delete|user|"+res[i].id+"')>delete</a></td></tr>");
+						$('#table tbody').append("<tr><td>"+res[i].fname+"</td><td>"+res[i].lname+"</td><td>"+res[i].email+"</td><td><a class='btn btn-xs btn-primary edit' href='/edit/user/"+res[i].id+"'>edit</span></td><td><span class='btn btn-xs btn-danger delete' onclick="+"deleteRecord('/delete/user/"+res[i].id+"')>delete</a></td></tr>");
 					} catch(e) {
 						console.log("Can not load resource");
 					}
@@ -18,7 +18,7 @@ function getData(url) {
 			} else if (url == "/get/numbers") {
 				for(let i = 0; i <= res.length; i++){
 					try {
-						$('#table tbody').append("<tr><td>"+res[i].home+"</td><td>"+res[i].mobile+"</td><td>"+res[i].office+"</td><td><span class='btn btn-xs btn-primary edit' href='/edit/number/"+res[i].userId+"'>edit</a></td><td><a class='btn btn-xs btn-danger delete' onclick="+"deleteRecord('|delete|number|"+res[i].userId+"')>delete</span></td></tr>");
+						$('#table tbody').append("<tr><td>"+res[i].home+"</td><td>"+res[i].mobile+"</td><td>"+res[i].office+"</td><td><a class='btn btn-xs btn-primary edit' href='/edit/number/"+res[i].id+"'>edit</a></td><td><a class='btn btn-xs btn-danger delete' onclick="+"deleteRecord('/delete/number/"+res[i].id+"')>delete</span></td></tr>");
 					} catch(e) {
 						console.log("Can not load resource");
 					}
@@ -29,13 +29,11 @@ function getData(url) {
 }
 
 function deleteRecord(url){
-	url = url.toString(); //.repace("|", "/");
-	url = url.replace(/\|/g, "/");
 	$.ajax({
 		url: url,
 		method: "delete",
 		success: function(res) {
-			// location.reload();
+			location.reload();
 		}, error: function(res) {
 			$('#error').addClass('alert');
 			$('#error').html(res.message);
@@ -43,34 +41,54 @@ function deleteRecord(url){
 	}); 
 }
 
-function updateRecord(){
-	let url = "/edit/user/"+$('#id').val();
-	$.ajax({
-		url: url,
-		method: "PUT",
-		data: {
+function updateRecord(alias){
+	let url = "/edit/"+alias+"/"+$('#id').val();
+	let data;
+	if (alias == 'user') {
+		data = {
 			fname: $('#fname').val(),
 			lname: $('#lname').val(),
 			email: $('#email').val(),
-		},
+		};
+	} else if (alias == 'number') {
+		data = {
+			user_id: 	$('#userId').val(),
+			home: 		$('#home').val(),
+			office: 	$('#office').val(),
+			mobile: 	$('#mobile').val(),
+		}
+	}
+	$.ajax({
+		url: url,
+		method: "PUT",
+		data: data,
 		success: function() {
-			window.location.replace("/get/users");
+			window.location.replace("/get/"+alias+"s");
 		}, error: function(res) {
-			alert("asds")
 			$('#error').addClass('alert');
 			$('#error').html(res.message);
 		}
 	}); 
 }
 
-function createUser(){
-	let data = {
-		fname: $('#fname').val(),
-		lname: $('#lname').val(),
-		email: $('#email').val(),
-	};
+function createUser(alias){
+	let data;
+	if (alias == 'user') {
+		data = {
+			fname: $('#fname').val(),
+			lname: $('#lname').val(),
+			email: $('#email').val(),
+		};
+	} else if (alias == 'numbers') {
+		data = {
+			user_id: 	$('#userId').val(),
+			home: 		$('#home').val(),
+			office: 	$('#office').val(),
+			mobile: 	$('#mobile').val(),
+		}
+	}
 	$.ajax({
-		url: "/add/users",
+		url: "/add/"+alias,
 		method: "POST",
 		data: data,
 		success: function(res) {
@@ -79,5 +97,11 @@ function createUser(){
 	});
 };
 
-$('#createUser').on('click', createUser); 
-$('#updateUser').on('click', updateRecord);
+$('#createRecord').on('click', function(){
+	let alias = $('#alias').val();
+	createRecord(alias);
+}); 
+$('#updateRecord').on('click', function(){
+	let alias = $('#alias').val();
+	updateRecord(alias);
+});
