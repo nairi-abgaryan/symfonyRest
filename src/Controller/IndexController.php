@@ -30,24 +30,25 @@ class IndexController extends Controller
 
 	/**
 	* @Route("/get/data")
+	* @Method({"GET"})
 	*/
 	public function getData(Request $request) {
-   		if ($request->isXmlHttpRequest() && $request->isMethod('get')) {
+   		if ($request->isXmlHttpRequest()) {
           	$entity = $this->getDoctrine()->getManager();
           	$qb = $entity->createQueryBuilder();
 		   	$sql = $qb
-		        ->select('q, p')
-		        ->from(Users::class, 'q')
-		        ->innerJoin(Numbers::class, 'p', Join::WITH, 'q.id = p.user_id')
+		        ->select('u, n')
+		        ->from(Users::class, 'u')
+		        ->Join(Numbers::class, 'n', Join::WITH, 'u.id = n.user_id')
 		    	->getQuery()
 		    	->execute();
-
-		    $normalizer = new ObjectNormalizer();
+			$normalizer = new ObjectNormalizer();
 			$normalizer->setIgnoredAttributes(array($sql));
 			$encoder = new JsonEncoder();
 			$serializer = new Serializer(array($normalizer), array($encoder));
 			$data = $serializer->serialize($sql, 'json');
-		    return JsonResponse($data);
+			echo $data;
+		    return new Response("");
    		}
 		return  $this->render("front/index.html.twig");
 	}
