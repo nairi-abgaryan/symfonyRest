@@ -40,8 +40,7 @@ class NumbersController extends Controller
      * @Route("/edit/number/{id}", name="editNumbers")
      * @Method({"GET", "PUT"})
      */
-    public function updateRecord(Request $request) {
-        $id = explode("/", $_SERVER['REQUEST_URI'])[3];
+    public function updateRecord(Request $request, $id) {
         $data = $this->getDoctrine()
                      ->getRepository(Numbers::class)
                      ->find($id);
@@ -65,7 +64,6 @@ class NumbersController extends Controller
      */
     public function deleteRecord(Request $request, $id) {
        if ($request->isXmlHttpRequest() && $request->isMethod('delete')) {
-            $id = explode("/", $_SERVER['REQUEST_URI'])[3];
             $data = $this->getDoctrine()
                      ->getRepository(Numbers::class)
                      ->find($id);

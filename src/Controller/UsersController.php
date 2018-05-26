@@ -40,8 +40,7 @@ class UsersController extends Controller
 	 * @Route("/edit/user/{id}", name="editUsers")
      * @Method({"GET", "PUT"})
      */
-   	public function updateRecord(Request $request) {
-        $id = explode("/", $_SERVER['REQUEST_URI'])[3];
+   	public function updateRecord(Request $request, $id) {
         $data = $this->getDoctrine()
                      ->getRepository(Users::class)
                      ->find($id);
@@ -62,9 +61,8 @@ class UsersController extends Controller
 	 * @Route("/delete/user/{id}", name="deleteUsers")
      * @Method({"GET", "DELETE"})
      */
-   	public function deleteRecord(Request $request) {
+   	public function deleteRecord(Request $request, $id) {
    		if ($request->isXmlHttpRequest() && $request->isMethod('delete')) {
-            $id = explode("/", $_SERVER['REQUEST_URI'])[3];
             $data = $this->getDoctrine()
                      ->getRepository(Users::class)
                      ->find($id);

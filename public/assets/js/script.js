@@ -23,6 +23,14 @@ function getData(url) {
 						console.log("Can not load resource");
 					}
 				}
+			} else if (url == "/get/data") {
+				for(let i = 0; i <= res.length; i++){
+					try {
+						$('#table tbody').append("<tr><td>"+res[i].fname+"</td><td>"+res[i].lname+"</td><td>"+res[i].email+"</td><td>"+res[i].home+"</td><td>"+res[i].mobile+"</td><td>"+res[i].office+"</td><td><a class='btn btn-xs btn-primary edit' href='/edit/number/"+res[i].id+"'>edit</a></td><td><a class='btn btn-xs btn-danger delete' onclick="+"deleteRecord('/delete/number/"+res[i].id+"')>delete</span></td></tr>");
+					} catch(e) {
+						console.log("Can not load resource");
+					}
+				}
 			}
 		}
 	});
