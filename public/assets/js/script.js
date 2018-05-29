@@ -24,12 +24,10 @@ function getData(url) {
 					}
 				}
 			} else if (url == "/get/data") {
-				// console.log(res);
-				// return;
 				for(let i = 0; i <= res.length; i++){
 					try {
 						if (i%2 == 0) {
-							$('#table tbody').append("<tr><td>"+res[i].fname+"</td><td>"+res[i].lname+"</td><td>"+res[i].email+"</td><td>"+res[1+i].home+"</td><td>"+res[1+i].mobile+"</td><td>"+res[1+i].office+"</td><td><a class='btn btn-xs btn-primary edit' href='/edit/number/"+res[i].id+"'>edit</a></td><td><a class='btn btn-xs btn-danger delete' onclick="+"deleteRecord('/delete/number/"+res[i].id+"')>delete</span></td></tr>");
+							$('#table tbody').append("<tr><td>"+res[i].fname+"</td><td>"+res[i].lname+"</td><td>"+res[i].email+"</td><td>"+res[1+i].home+"</td><td>"+res[1+i].mobile+"</td><td>"+res[1+i].office+"</td></tr>");
 						}
 					} catch(e) {
 						console.log("Can not load resource");

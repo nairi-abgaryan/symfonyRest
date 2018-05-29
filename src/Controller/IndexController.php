@@ -10,8 +10,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-// use Doctrine\ORM\Query\ResultSetMapping;
-// use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Doctrine\ORM\Query\Expr\Join;
 use App\Entity\Numbers;
 use App\Entity\Users;
